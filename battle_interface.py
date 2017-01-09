@@ -39,10 +39,17 @@ def run(bot1_file, bot2_file, map = ''):
         comm.append(map)
     out = subprocess.check_output(comm)
     out = out.split('\n')
-    score_ln = out[-3]
-    win_ln = out[-2]
+    i = -2
+    if out[-1] != '':
+        i += 1
+    score_ln = out[i-1]
+    win_ln = out[i]
     scores = tuple(int(s) for s in score_ln.split(' ')[1:])
-    winner = int(win_ln.split(' ')[1])
+    winner = win_ln.split(' ')[1]
+    if winner == 'finished':
+        winner = 0
+    else:
+        winner = int(winner)
     return scores, winner
     
 if __name__ == "__main__":
