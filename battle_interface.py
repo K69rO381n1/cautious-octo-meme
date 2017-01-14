@@ -16,11 +16,13 @@ if kit_path == u'':
 
 def maps():
     map_dir = os.path.join(kit_path, 'maps')
-    return os.listdir(map_dir)
+    ret = os.listdir(map_dir)
+    return [f for f in ret if os.path.isfile(os.path.join(map_dir,f))]
 
 def bots():
     bot_dir = os.path.join(kit_path, 'bots')
-    return os.listdir(bot_dir)
+    ret = os.listdir(bot_dir)
+    return [f for f in ret if os.path.isfile(os.path.join(bot_dir,f))]
 
 def run(bot1_file, bot2_file, map = ''):
     if map == 'random':
@@ -37,7 +39,8 @@ def run(bot1_file, bot2_file, map = ''):
     comm = [run_path,bot1_file,bot2_file]
     if map != '':
         comm.append(map)
-    out = subprocess.check_output(comm)
+    null_file = open(os.devnull,'w')
+    out = subprocess.check_output(comm, stderr = null_file)
     out = out.split('\n')
     i = -2
     if out[-1] != '':
@@ -54,8 +57,16 @@ def run(bot1_file, bot2_file, map = ''):
     
 if __name__ == "__main__":
     import sys
+    if '-b' in sys.argv:
+        print '\n'.join(bots())
+        sys.exit(0)
+    if '-m' in sys.argv:
+        print '\n'.join(maps())
+        sys.exit(0)
     if len(sys.argv) not in (3,4):
-        print 'Usage: battle_interface.py <bot1> <bot2> [<map> or \'random\']'
+        print 'Usage: battle_interface.py <bot1> <bot2> [<map> or \'random\'] to run bot'
+        print '       battle_interface.py -b                                to get all bots'
+        print '       battle_interface.py -m                                to get all maps'
         sys.exit(0)
     scores,winner = run(*sys.argv[1:])
     print ' '.join([str(e) for e in scores])
