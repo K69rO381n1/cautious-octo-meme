@@ -45,7 +45,7 @@ def load_matrix_array(filename):
                 mats[-1].append([float(s) for s in line.split(' ')])
         return mats
 
-def create_bot(output_file, matrix_list, template_file = default_file)
+def create_bot(output_file, matrix_list, template_file = default_file):
     '''
     creates bot in output_file, using given matrix list and tamplate file
     '''
@@ -60,4 +60,4 @@ if __name__ == "__main__":
     if len(sys.argv) < 4:
         sys.argv.append(default_file)
     _, param_file, out_file, tmplt_file = sys.argv[:4]
-    create_bot( out_file, load_matrix_array(param_file)tmplt_file)
+    create_bot( out_file, load_matrix_array(param_file),tmplt_file)
