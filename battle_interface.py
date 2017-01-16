@@ -15,16 +15,30 @@ if kit_path == u'':
     exit(0)
 
 def maps():
+    '''
+    returns list of all avaliable maps
+    '''
     map_dir = os.path.join(kit_path, 'maps')
     ret = os.listdir(map_dir)
     return [f for f in ret if os.path.isfile(os.path.join(map_dir,f))]
 
 def bots():
+    '''
+    returns list of all avaliable bots
+    '''
     bot_dir = os.path.join(kit_path, 'bots')
     ret = os.listdir(bot_dir)
     return [f for f in ret if os.path.isfile(os.path.join(bot_dir,f))]
 
 def run(bot1_file, bot2_file, map = ''):
+    '''
+    runs game between two bots, file names are given
+    map can be given or not, if not default map is used
+    supports random map with parameter 'random'
+    returns result (winner, scores)
+    scores: (player1, player2)
+    winner 1,2 or 0 for tie
+    '''
     if map == 'random':
         map = random.choice(maps())
     run_path = os.path.join(kit_path,'run.bat')
