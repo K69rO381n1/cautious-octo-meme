@@ -1,8 +1,18 @@
 # module for creating bot from parameter matrix
 
 # default template file
-default_file = 'template.py'
+import os
 
+path = ''
+try:
+    with open(os.path.abspath('self_path.txt'), 'r') as f:
+        lines = f.readlines()
+        path+=''.join(lines)
+except IOError:
+    print 'try adding file self_path.txt'
+    exit(0)
+
+default_file = os.path.join(path,'template.py')
 
 def load(filename):
     '''
