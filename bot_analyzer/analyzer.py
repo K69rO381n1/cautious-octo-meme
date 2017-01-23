@@ -20,4 +20,10 @@ def save(string, filename):
         f.write(string)
 
 def manipulate(string):
-    place = re.match(u'def do_turn\(.+\):')
+    place = re.search(u'def do_turn\(.+\):', string).end(0)
+    print place
+
+if __name__ == "__main__":
+    import sys
+    manipulate(load(sys.argv[1]))
+    #save(manipulate(load(sys.argv[1])),sys.argv[2])
