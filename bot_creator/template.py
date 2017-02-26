@@ -8,14 +8,14 @@ def act(game, instructions):
         if inst[0] == 1:
             directions[int(inst[1])] += 'nswe'[int(inst[2])]
         elif inst[0] == 2:
-            ms = game.get_my_ship_by_id(int(inst[1]))
-            es = game.get_enemy_ship_by_id(int(inst[2]))
+            ms = game.get_my_pirate(int(inst[1]))
+            es = game.get_enemy_pirate(int(inst[2]))
             game.attack(ms, es)
         elif inst[0] == 3:
-            ms = game.get_my_ship_by_id(int(inst[1]))
+            ms = game.get_my_pirate(int(inst[1]))
             game.defend(ms)
         elif inst[0] == 4:
-            ms = game.get_my_ship_by_id(int(inst[1]))
+            ms = game.get_my_pirate(int(inst[1]))
             game.summon_bermuda_zone(ms)
     for ship in game.all_my_pirates():
         dest = game.destination(ship, directions[ship.id])
