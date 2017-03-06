@@ -1,6 +1,8 @@
-from param_matrix_protocol import get_matching_column, choose_action
+from random import choice, randint
 
-matrix = []
+from param_matrix_protocol import get_matching_column, choose_action, actions
+
+matrix = {}
 def act(game, instructions):
     # currently receives [num(0-4),num(0-3),num(0-3)]*6
     directions = ['' for _ in game.all_my_pirates()]
@@ -45,17 +47,26 @@ def is_valid_actions_list(actions_list):
 
 
 def choose_actions(game):
-    column = get_matching_column(game)
-    actions_list = []
+    situation = get_matching_column(game)
 
-    while True:
-        new_action = choose_action(matrix, column)
-        if is_valid_actions_list(actions_list + [new_action]):
-            actions_list.append(new_action)
-        else:
-            break
+    if not matrix.has_key(situation):
+        # TODO: complete undefined behavior
+        return []
 
-    return actions_list
+    keys = matrix[situation].keys()
+    values = [matrix[situation][key] for key in keys]
+
+    total_sum = sum(values)
+
+    required_sum = randint(total_sum)
+    current_action_index = 0
+    current_sum = 0
+
+    while current_sum < required_sum:
+        current_sum += values[current_action_index]
+        current_action_index += 1
+
+    return keys[current_action_index - 1]
 
 
 def do_turn(game):
@@ -66,12 +77,12 @@ def do_turn(game):
         I think it would be better to save a Dictionary:
          The keys will be the so called column index (condition combinations)
          The value will be a Dictionary:
-            The Value will be a list of actions that has been performed by the bot
-            The keys will be the number of encounters with this list of actions
+            The keys will be a list of actions that has been performed by the bot
+            The values will be the number of encounters with this list of actions
     :param game: 
     :return: 
     """
     # act(game, calculate(parse(game)))
 
-    for action in choose_actions(game):
-        action(game)
+    for action_id in choose_actions(game):
+        actions[action_id](game)

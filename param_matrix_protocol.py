@@ -59,41 +59,41 @@ NUM_OF_PIRATES_IN_GROUP = 4
 
 
 # ************************************************ Conditions ************************************************
-def is_right_to_initial_loc(game, pirate_index):
-    return game.get_my_pirate(pirate_index).location.column > game.get_my_pirate(pirate_index).initial_loc.column
+def is_right_to_initial_loc(game, pirate_id):
+    return game.get_my_pirate(pirate_id).location.column > game.get_my_pirate(pirate_id).initial_loc.column
 
 
-def is_carrying_treasures(game, pirate_index):
-    return game.get_my_pirate(pirate_index).has_treasure
+def is_carrying_treasures(game, pirate_id):
+    return game.get_my_pirate(pirate_id).has_treasure
 
 
-def is_enemy_guarding_island(game, enemy_index):
-    return game.in_range(game.get_my_pirate(0).initial_loc, game.get_enemy_pirate(enemy_index))
+def is_enemy_guarding_island(game, enemy_id):
+    return game.in_range(game.get_my_pirate(0).initial_loc, game.get_enemy_pirate(enemy_id))
 
 
 # Idea: add another conditions, that checks when the pirates are about to get loaded / sobered.
 # Prevent the use of weapons /
-def are_weapons_loaded(game, pirate_index):
-    return game.get_my_pirate(pirate_index).reload_turns == 0
+def are_weapons_loaded(game, pirate_id):
+    return game.get_my_pirate(pirate_id).reload_turns == 0
 
 
-def is_defense_measures_available(game, pirate_index):
-    return game.get_my_pirate(pirate_index).defense_reload_turns == 0
+def is_defense_measures_available(game, pirate_id):
+    return game.get_my_pirate(pirate_id).defense_reload_turns == 0
 
 
-def is_sober(game, pirate_index):
-    return game.get_my_pirate(pirate_index).turns_to_sober == 0
+def is_sober(game, pirate_id):
+    return game.get_my_pirate(pirate_id).turns_to_sober == 0
 
 
-ENEMY_IN_RANGE = [lambda game, pirate_index:
-                  game.in_range(game.get_my_pirate(pirate_index), game.get_enemy_pirate(enemy_index))
-                  for enemy_index in range(NUM_OF_PIRATES_IN_GROUP)]
+ENEMY_IN_RANGE = [lambda game, pirate_id:
+                  game.in_range(game.get_my_pirate(pirate_id), game.get_enemy_pirate(enemy_id))
+                  for enemy_id in range(NUM_OF_PIRATES_IN_GROUP)]
 
-ENEMY_ARE_CLOSING_IN = [(lambda game, pirate_index:
+ENEMY_ARE_CLOSING_IN = [(lambda game, pirate_id:
                          game.distance(
-                             game.get_my_pirate(pirate_index).location,
-                             game.get_enemy_pirate(enemy_index).location)
-                         < game.get_my_pirate(0).attack_radius) for enemy_index in range(NUM_OF_PIRATES_IN_GROUP)]
+                             game.get_my_pirate(pirate_id).location,
+                             game.get_enemy_pirate(enemy_id).location)
+                         < game.get_my_pirate(0).attack_radius) for enemy_id in range(NUM_OF_PIRATES_IN_GROUP)]
 
 conditions = [is_right_to_initial_loc, is_carrying_treasures, is_enemy_guarding_island, are_weapons_loaded,
               are_weapons_loaded, is_defense_measures_available, is_sober] + ENEMY_IN_RANGE + ENEMY_ARE_CLOSING_IN
@@ -107,46 +107,46 @@ def _direction_to_location(initial_loc, direction):
 
 
 SAIL = [lambda game:
-        game.set_sail(game.get_my_pirate(pirate_index),
-                      _direction_to_location(game.get_my_pirate(pirate_index).initial_loc, direction))
-        for direction in 'nswe-' for pirate_index in range(NUM_OF_PIRATES_IN_GROUP)]
+        game.set_sail(game.get_my_pirate(pirate_id),
+                      _direction_to_location(game.get_my_pirate(pirate_id).initial_loc, direction))
+        for direction in 'nswe-' for pirate_id in range(NUM_OF_PIRATES_IN_GROUP)]
 
-SHOT = [lambda game: game.attack(game.get_my_pirate(pirate_index), game.get_enemy_pirate(enemy_index))
-        for pirate_index in range(NUM_OF_PIRATES_IN_GROUP) for enemy_index in range(NUM_OF_PIRATES_IN_GROUP)]
+SHOT = [lambda game: game.attack(game.get_my_pirate(pirate_id), game.get_enemy_pirate(enemy_id))
+        for pirate_id in range(NUM_OF_PIRATES_IN_GROUP) for enemy_id in range(NUM_OF_PIRATES_IN_GROUP)]
 
-DEFEND = [lambda game: game.defend(pirate_index) for pirate_index in range(NUM_OF_PIRATES_IN_GROUP)]
+DEFEND = [lambda game: game.defend(pirate_id) for pirate_id in range(NUM_OF_PIRATES_IN_GROUP)]
 
-BERMUDA_SUMMON = [lambda game: game.summon_bermuda_zone(game.get_my_pirate(pirate_index))
-                  for pirate_index in range(NUM_OF_PIRATES_IN_GROUP)]
+BERMUDA_SUMMON = [lambda game: game.summon_bermuda_zone(game.get_my_pirate(pirate_id))
+                  for pirate_id in range(NUM_OF_PIRATES_IN_GROUP)]
 
 actions = SAIL + SHOT + DEFEND + BERMUDA_SUMMON
 
 SAIL_BASE_INDEX = 0
 
 
-def get_sail_index(pirate_index, direction):
-    return SAIL_BASE_INDEX + 'nswe-'.index(direction) + 4 * pirate_index
+def get_sail_index(pirate_id, direction):
+    return SAIL_BASE_INDEX + 'nswe-'.index(direction) + 4 * pirate_id
 
 
 SHOT_BASE_INDEX = 20
 
 
-def get_shot_index(pirate_index, enemy_index):
-    return SHOT_BASE_INDEX + pirate_index + 4 * enemy_index
+def get_shot_index(pirate_id, enemy_id):
+    return SHOT_BASE_INDEX + pirate_id + 4 * enemy_id
 
 
 DEFEND_BASE_INDEX = 34
 
 
-def get_defend_index(pirate_index):
-    return DEFEND_BASE_INDEX + pirate_index
+def get_defend_index(pirate_id):
+    return DEFEND_BASE_INDEX + pirate_id
 
 
 BERMUDA_SUMMON_BASE_INDEX = 38
 
 
-def get_bermuda_zone_summon_index(pirate_index):
-    return BERMUDA_SUMMON_BASE_INDEX + pirate_index
+def get_bermuda_zone_summon_index(pirate_id):
+    return BERMUDA_SUMMON_BASE_INDEX + pirate_id
 
 
 # ************************************************ Utils ************************************************
@@ -164,20 +164,3 @@ def get_matching_column(game):
         if conditions[i](game):
             status += 2 ** i
     return status
-
-
-def choose_action(matrix, column_index):
-    total_sum = sum(matrix[column_index])
-
-    if total_sum == 0:
-        return choice(actions)
-
-    required_sum = randint(total_sum)
-    current_action_index = 0
-    current_sum = 0
-
-    while current_sum < required_sum:
-        current_sum += matrix[column_index][current_action_index]
-        current_action_index += 1
-
-    return actions[current_action_index - 1]
