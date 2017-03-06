@@ -1,11 +1,19 @@
 from bot_analyzer.pythonRunner import Pirates
+from numpy import zeros
+
+from param_matrix_protocol import *
 
 
 class GameWrapper(Pirates):
+    matrix = zeros(shape=2 ** len(conditions), dtype=bytes)
+
     def __init__(self, game):
         assert isinstance(game, Pirates)
         Pirates.__init__(self)
         self.game = game
+        self.column = get_matching_column(game)
+
+    # ####################################################################
 
     def all_my_pirates(self):
         return self.game.all_my_pirates()
@@ -62,6 +70,19 @@ class GameWrapper(Pirates):
         return self.game.get_sail_options(pirate, destination, moves)
 
     def set_sail(self, pirate, destination):
+        if pirate.location.col < destination.col:
+            GameWrapper.matrix[self.column][get_sail_index(pirate.id, 'e')] += 1
+        elif pirate.location.col > destination.col:
+            GameWrapper.matrix[self.column][get_sail_index(pirate.id, 'w')] += 1
+
+        if pirate.location.row < destination.row:
+            GameWrapper.matrix[self.column][get_sail_index(pirate.id, 'n')] += 1
+        elif pirate.location.row > destination.row:
+            GameWrapper.matrix[self.column][get_sail_index(pirate.id, 's')] += 1
+
+        if pirate.location.col == destination.col or pirate.location.row == destination.row:
+            GameWrapper.matrix[self.column][get_sail_index(pirate.id, '-')] += 1
+
         self.game.set_sail(pirate, destination)
 
     def distance(self, loc1, loc2):
@@ -80,6 +101,7 @@ class GameWrapper(Pirates):
         return self.game.get_turn()
 
     def attack(self, pirate, target):
+        GameWrapper.matrix[self.column][get_shot_index(pirate.id, target.id)] += 1
         return self.game.attack(pirate, target)
 
     def in_range(self, obj1, obj2):
@@ -89,6 +111,7 @@ class GameWrapper(Pirates):
         return self.game.is_occupied(loc)
 
     def defend(self, pirate):
+        GameWrapper.matrix[self.column][get_defend_index(pirate.id)] += 1
         self.game.defend(pirate)
 
     def powerups(self):
@@ -116,6 +139,7 @@ class GameWrapper(Pirates):
         return self.game.get_enemy_bermuda_zone()
 
     def summon_bermuda_zone(self, pirate):
+        GameWrapper.matrix[self.column][get_bermuda_zone_summon_index(pirate.id)] += 1
         self.game.summon_bermuda_zone(pirate)
 
     def get_max_points(self):

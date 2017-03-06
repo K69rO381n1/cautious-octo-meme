@@ -666,7 +666,7 @@ class Pirates():
     def visible(self, loc):
         ' determine which squares are visible to the given player '
 
-        if self.vision == None:
+        if self.vision is None:
             if not hasattr(self, 'vision_offsets_2'):
                 # precalculate squares around an pirate to set as visible
                 self.vision_offsets_2 = []

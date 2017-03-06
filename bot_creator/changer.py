@@ -49,7 +49,7 @@ def load_matrix_array(filename):
 
 def create_bot(output_file, matrix_list, template_file=default_file):
     """
-    creates bot in output_file, using given matrix list and tamplate file
+    creates bot in output_file, using given matrix list and template file
     """
     save(manipulate(load(template_file), matrix_list), output_file)
 

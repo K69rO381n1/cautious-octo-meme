@@ -1,5 +1,8 @@
+from param_matrix_protocol import get_matching_column, choose_action
+
+matrix = []
 def act(game, instructions):
-    # currently recieves [num(0-4),num(0-3),num(0-3)]*6 
+    # currently receives [num(0-4),num(0-3),num(0-3)]*6
     directions = ['' for _ in game.all_my_pirates()]
     turn = instructions
 
@@ -36,5 +39,39 @@ def parse(game):
     return game.get_turn()
 
 
+def is_valid_actions_list(actions_list):
+    # TODO: !!
+    return True
+
+
+def choose_actions(game):
+    column = get_matching_column(game)
+    actions_list = []
+
+    while True:
+        new_action = choose_action(matrix, column)
+        if is_valid_actions_list(actions_list + [new_action]):
+            actions_list.append(new_action)
+        else:
+            break
+
+    return actions_list
+
+
 def do_turn(game):
-    act(game, calculate(parse(game)))
+    """
+    New idea:
+        Since most of the cases wont be examined during the bot's analytics,
+        and since the order that the actions are been made is crucial;
+        I think it would be better to save a Dictionary:
+         The keys will be the so called column index (condition combinations)
+         The value will be a Dictionary:
+            The Value will be a list of actions that has been performed by the bot
+            The keys will be the number of encounters with this list of actions
+    :param game: 
+    :return: 
+    """
+    # act(game, calculate(parse(game)))
+
+    for action in choose_actions(game):
+        action(game)
