@@ -31,14 +31,15 @@ def analyze_bot(name, map = ''):
     matrix = {}    
     
     cur_bot_name = os.path.join(bots_path, name)
-    #inject code
     new_bot_name = os.abspath('bots/current_experiment_bot.py')
+    
+    anal.inject_adapter(cur_bot_name, new_bot_name)
+
     matrix_name = os.abspath('bots/current_experiment_matrix.py')
-    #save file into new_bot_name
     
     for bot in b_int.bots():
         #run
-        run(cur_bot_name, bot, map)
+        b_int.run(cur_bot_name, bot, map)
         #load matrix from file
         cur_matrix = None
         
