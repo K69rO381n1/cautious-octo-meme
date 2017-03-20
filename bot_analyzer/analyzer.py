@@ -54,18 +54,21 @@ def inject_adapter(bot_file_path, new_bot_path):
     
     save(code, new_bot_path)
 
-def inject_param_dict(template_file_path, param_dict):
+
+def inject_param_dict(template_file_path, param_dict, new_bot_file):
     code = load(template_file_path)
 
     if splitext(template_file_path)[1] == PYTHON_EXT:
 
-        inject(code, PY_PARAM_DICT_INITIALIZATION_STATEMENT, str(param_dict), True)
+        code = inject(code, PY_PARAM_DICT_INITIALIZATION_STATEMENT, str(param_dict), True)
 
     elif splitext(template_file_path)[1] == JAVA_EXT:
         pass
 
     elif splitext(template_file_path)[1] == C_SHARP_EXT:
         pass
+
+    save(code, new_bot_file)
 
 
 if __name__ == "__main__":
