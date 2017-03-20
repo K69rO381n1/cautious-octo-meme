@@ -39,19 +39,20 @@ def inject(code, search_string, inject_string, place_before_or_after):
                         inject_string + search_string, count=1)
 
 
-def inject_adapter(bot_file_path):
+def inject_adapter(bot_file_path, new_bot_path):
     code = load(bot_file_path)
 
     if splitext(bot_file_path)[1] == PYTHON_EXT:
 
-        inject(code, PY_DO_TURN_STATEMENT, PY_GAME_OBJECT_WRAPPING, True)
+        code = inject(code, PY_DO_TURN_STATEMENT, PY_GAME_OBJECT_WRAPPING, True)
 
     elif splitext(bot_file_path)[1] == JAVA_EXT:
         pass
 
     elif splitext(bot_file_path)[1] == C_SHARP_EXT:
         pass
-
+    
+    save(code, new_bot_path)
 
 def inject_param_dict(template_file_path, param_dict):
     code = load(template_file_path)

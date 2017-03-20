@@ -1,4 +1,4 @@
-from bot_analyzer.pythonRunner import Pirates
+from pythonRunner import Pirates
 from numpy import zeros
 
 from param_matrix_protocol import *
