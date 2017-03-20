@@ -1,60 +1,63 @@
 from random import choice, randint
 
-from param_matrix_protocol import get_matching_column, choose_action, actions
+from param_matrix_protocol import get_matching_column, actions
 
-matrix = {}
-def act(game, instructions):
-    # currently receives [num(0-4),num(0-3),num(0-3)]*6
-    directions = ['' for _ in game.all_my_pirates()]
-    turn = instructions
-
-    for i in xrange(len(turn)/3):
-        inst = turn[3 * i: 3 * i + 3]
-        if inst[0] == 1:
-            directions[int(inst[1])] += 'nswe'[int(inst[2])]
-
-        elif inst[0] == 2:
-            ms = game.get_my_ship_by_id(int(inst[1]))
-            es = game.get_enemy_ship_by_id(int(inst[2]))
-            game.attack(ms, es)
-
-        elif inst[0] == 3:
-            ms = game.get_my_ship_by_id(int(inst[1]))
-            game.defend(ms)
-
-        elif inst[0] == 4:
-            ms = game.get_my_ship_by_id(int(inst[1]))
-            game.summon_bermuda_zone(ms)
-
-    for ship in game.all_my_pirates():
-        dest = game.destination(ship, directions[ship.id])
-        game.set_sail(ship, dest)
+# Keep this unfilled
+param_dict =
 
 
-def calculate(inp):
-    mats = [
-    ]
-    return mats[0][inp]
-
-
-def parse(game):
-    return game.get_turn()
-
-
-def is_valid_actions_list(actions_list):
-    # TODO: !!
-    return True
+# def act(game, instructions):
+#     # currently receives [num(0-4),num(0-3),num(0-3)]*6
+#     directions = ['' for _ in game.all_my_pirates()]
+#     turn = instructions
+#
+#     for i in xrange(len(turn)/3):
+#         inst = turn[3 * i: 3 * i + 3]
+#         if inst[0] == 1:
+#             directions[int(inst[1])] += 'nswe'[int(inst[2])]
+#
+#         elif inst[0] == 2:
+#             ms = game.get_my_ship_by_id(int(inst[1]))
+#             es = game.get_enemy_ship_by_id(int(inst[2]))
+#             game.attack(ms, es)
+#
+#         elif inst[0] == 3:
+#             ms = game.get_my_ship_by_id(int(inst[1]))
+#             game.defend(ms)
+#
+#         elif inst[0] == 4:
+#             ms = game.get_my_ship_by_id(int(inst[1]))
+#             game.summon_bermuda_zone(ms)
+#
+#     for ship in game.all_my_pirates():
+#         dest = game.destination(ship, directions[ship.id])
+#         game.set_sail(ship, dest)
+#
+#
+# def calculate(inp):
+#     mats = [
+#     ]
+#     return mats[0][inp]
+#
+#
+# def parse(game):
+#     return game.get_turn()
+#
+#
+# def is_valid_actions_list(actions_list):
+#     # TODO: !!
+#     return True
 
 
 def choose_actions(game):
     situation = get_matching_column(game)
 
-    if not matrix.has_key(situation):
+    if not param_dict.has_key(situation):
         # TODO: complete undefined behavior
         return []
 
-    keys = matrix[situation].keys()
-    values = [matrix[situation][key] for key in keys]
+    keys = param_dict[situation].keys()
+    values = [param_dict[situation][key] for key in keys]
 
     total_sum = sum(values)
 
