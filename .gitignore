@@ -3,3 +3,5 @@
 kit_path.txt
 *.pyc
 bot_creator/self_path.txt
+bots/current_experiment_bot.py
+bots/current_experiment_matrix.py
