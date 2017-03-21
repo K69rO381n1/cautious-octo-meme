@@ -34,14 +34,16 @@ def analyze_bot(name, map = ''):
     new_bot_name = os.path.abspath('bots/current_experiment_bot.py')
     
     anal.inject_adapter(cur_bot_name, new_bot_name)
+    
+    name_m = os.path.splitext(name)[0]+'.pd'
 
-    matrix_name = os.path.abspath('bots/current_experiment_matrix.py')
+    matrix_name = os.path.abspath(os.path.join('bots','param_dictionaries',name_m))
     
     for bot in b_int.bots():
         #run
         b_int.run(cur_bot_name, bot, map)
         #load matrix from file
-        cur_matrix = None
+        cur_matrix = anal.str2param_dict(anal.load(matrix_name))
         
         sparse_matrix_add_into(matrix, cur_matrix)
     
