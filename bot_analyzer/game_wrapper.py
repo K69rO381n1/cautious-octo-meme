@@ -3,9 +3,20 @@ from numpy import zeros
 
 from param_matrix_protocol import *
 
+DEFAULT_PARAM_DICT_FOLDER = u'\param_dictionaries\\'
+PARAM_DICT_EXT = '.pd'
+
 
 class GameWrapper(Pirates):
-    param_dict = {}
+    class SavedDictionary(dict):
+        def __del__(self):
+            with open(DEFAULT_PARAM_DICT_FOLDER + GameWrapper.enemy_name + PARAM_DICT_EXT, 'r') as param_dict_file:
+                from bot_analyzer.analyzer import param_dict2str
+                param_dict_file.write(param_dict2str(GameWrapper.param_dict))
+                param_dict_file.close()
+
+    param_dict = SavedDictionary()
+    enemy_name = None
 
     def __init__(self, game):
         assert isinstance(game, Pirates)
@@ -13,6 +24,9 @@ class GameWrapper(Pirates):
         self.game = game
         self.situation = get_matching_column(game)
         self.actions_been_taken = []
+
+        if GameWrapper.enemy_name is None:
+            GameWrapper.enemy_name = game.get_opponent_name()
 
     def __del__(self):
         if GameWrapper.param_dict.has_key(self.situation):
@@ -197,6 +211,3 @@ class GameWrapper(Pirates):
 
     def get_opponent_name(self):
         return self.game.get_opponent_name()
-
-    class SavedDictionary(dict):
-        def __del__(self):

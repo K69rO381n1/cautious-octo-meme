@@ -77,6 +77,14 @@ def inject_param_dict(template_file_path, param_dict, new_bot_file=None):
     save(code, new_bot_file)
 
 
+def param_dict2str(param_dict):
+    return ''
+
+
+def str2param_dict(param_dict_as_str):
+    return {}
+
+
 if __name__ == "__main__":
 
     import sys
