@@ -36,7 +36,7 @@ def inject(code, search_string, inject_string, place_before_or_after):
     return code.replace(search_string,
                         search_string + inject_string if
                         place_before_or_after else
-                        inject_string + search_string, count=1)
+                        inject_string + search_string, 1)
 
 
 def inject_adapter(bot_file_path, new_bot_path):

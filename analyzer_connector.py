@@ -31,11 +31,11 @@ def analyze_bot(name, map = ''):
     matrix = {}    
     
     cur_bot_name = os.path.join(bots_path, name)
-    new_bot_name = os.abspath('bots/current_experiment_bot.py')
+    new_bot_name = os.path.abspath('bots/current_experiment_bot.py')
     
     anal.inject_adapter(cur_bot_name, new_bot_name)
 
-    matrix_name = os.abspath('bots/current_experiment_matrix.py')
+    matrix_name = os.path.abspath('bots/current_experiment_matrix.py')
     
     for bot in b_int.bots():
         #run
@@ -46,3 +46,7 @@ def analyze_bot(name, map = ''):
         sparse_matrix_add_into(matrix, cur_matrix)
     
     return matrix
+    
+if __name__ == "__main__":
+    from sys import argv    
+    print analyze_bot(*argv[1:])
