@@ -5,7 +5,7 @@ from param_matrix_protocol import *
 
 
 class GameWrapper(Pirates):
-    matrix = {}
+    param_dict = {}
 
     def __init__(self, game):
         assert isinstance(game, Pirates)
@@ -15,13 +15,13 @@ class GameWrapper(Pirates):
         self.actions_been_taken = []
 
     def __del__(self):
-        if GameWrapper.matrix.has_key(self.situation):
-            if GameWrapper.matrix[self.situation].has_key(self.actions_been_taken):
-                GameWrapper.matrix[self.situation][self.actions_been_taken] += 1
+        if GameWrapper.param_dict.has_key(self.situation):
+            if GameWrapper.param_dict[self.situation].has_key(self.actions_been_taken):
+                GameWrapper.param_dict[self.situation][self.actions_been_taken] += 1
             else:
-                GameWrapper.matrix[self.situation][self.actions_been_taken] = 1
+                GameWrapper.param_dict[self.situation][self.actions_been_taken] = 1
         else:
-            GameWrapper.matrix[self.situation] = {self.actions_been_taken: 1}
+            GameWrapper.param_dict[self.situation] = {self.actions_been_taken: 1}
 
     # ####################################################################
 
@@ -197,3 +197,6 @@ class GameWrapper(Pirates):
 
     def get_opponent_name(self):
         return self.game.get_opponent_name()
+
+    class SavedDictionary(dict):
+        def __del__(self):

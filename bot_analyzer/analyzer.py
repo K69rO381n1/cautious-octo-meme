@@ -39,7 +39,10 @@ def inject(code, search_string, inject_string, place_before_or_after):
                         inject_string + search_string, 1)
 
 
-def inject_adapter(bot_file_path, new_bot_path):
+def inject_adapter(bot_file_path, new_bot_path=None):
+    if new_bot_path is None:
+        new_bot_path = bot_file_path
+
     code = load(bot_file_path)
 
     if splitext(bot_file_path)[1] == PYTHON_EXT:
@@ -55,7 +58,10 @@ def inject_adapter(bot_file_path, new_bot_path):
     save(code, new_bot_path)
 
 
-def inject_param_dict(template_file_path, param_dict, new_bot_file):
+def inject_param_dict(template_file_path, param_dict, new_bot_file=None):
+    if new_bot_file is None:
+        new_bot_file = template_file_path
+
     code = load(template_file_path)
 
     if splitext(template_file_path)[1] == PYTHON_EXT:

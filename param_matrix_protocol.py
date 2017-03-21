@@ -85,6 +85,9 @@ def is_sober(game, pirate_id):
     return game.get_my_pirate(pirate_id).turns_to_sober == 0
 
 
+# TODO: is_poweruped? What kind of powerup?
+
+
 ENEMY_IN_RANGE = [lambda game, pirate_id:
                   game.in_range(game.get_my_pirate(pirate_id), game.get_enemy_pirate(enemy_id))
                   for enemy_id in range(NUM_OF_PIRATES_IN_GROUP)]

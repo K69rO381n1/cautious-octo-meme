@@ -2,6 +2,8 @@ import random
 import os
 import subprocess
 
+#
+
 # kit_path = u'C:\Ilia_proj\big8starter_kit\starter_kit' #do not erase, only commnet out!
 # kit_path = u'D:\Users\J\Downloads\big8starter_kit\starter_kit'
 kit_path = u''
@@ -56,8 +58,12 @@ def run(bot1_file, bot2_file, map=''):
     comm = [run_path, bot1_file, bot2_file]
     if map != '':
         comm.append(map)
+
+    print comm
+
     null_file = open(os.devnull, 'w')
     out = subprocess.check_output(comm, stderr=null_file)
+    print out
     out = out.split('\n')
     i = -2
     if out[-1] != '':
@@ -90,7 +96,6 @@ def test_all(bot, map='', tie_adds_half = False):
         
         
 
-
 if __name__ == "__main__":
     import sys
 
@@ -108,3 +113,4 @@ if __name__ == "__main__":
     scores, winner = run(*sys.argv[1:])
     print ' '.join([str(e) for e in scores])
     print winner
+
