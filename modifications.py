@@ -18,9 +18,10 @@ def modify(bots2fitness_mapping):
             worse_parent = lst_survivors[j]
             result.add(mate((better_parent, bots2fitness_mapping[better_parent]),
                             (worse_parent, bots2fitness_mapping[worse_parent])))
-    return result|set(lst_survivors)
+    return result | set(lst_survivors)
 
-def mate(mat1_details,mat2_details):
+
+def mate(mat1_details, mat2_details):
     """
     mating two given matrices of bots by weighted summing their persentage for each sequence of actions with their
     fitness as their ranking and divides by their sum.
@@ -29,14 +30,22 @@ def mate(mat1_details,mat2_details):
     :return:
     """
     result = {}
-    mat1=mat1_details[0]
-    mat2=mat2_details[0]
-    for x in mat2:
+    mat1 = mat1_details[0]
+    mat2 = mat2_details[0]
+    for x in set(mat1.keys()) | set(mat2.keys()):
         if x not in mat1:
-            result[x] = dict(mat2[x])
+            result[x] = {y: mat2_details[0] * mat2[y] for y in mat2}
+        elif x not in mat2:
+            result[x] = {y: mat1_details[0] * mat1[y] for y in mat1}
         else:
+            result[x] = dict()
             for y in mat2[x]:
                 if y in mat1[x]:
-                    result[x][y] = mat1[x][y] + mat2[x][y]
+                    result[x][y] = (mat1_details[0] * mat1[x][y] + mat2_details[0] * mat2[x][y])
                 else:
-                    mat1[x][y] = mat2[x][y]
+                    result[x][y] = mat2[x][y]
+    return mutate(result)
+
+
+def mutate(bot):
+    pass
