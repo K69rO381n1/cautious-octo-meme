@@ -1,5 +1,5 @@
 __author__ = 'roeyz'
-
+import random
 
 def modify(bots2fitness_mapping):
     """
@@ -48,4 +48,13 @@ def mate(mat1_details, mat2_details):
 
 
 def mutate(bot):
-    pass
+    for x in bot:
+        for statement in x:
+            c=random.random()
+            if c<0.01:
+                x[statement]+=1
+            elif 0.99<c and x[statement]!=0:
+                x[statement]-=1
+    return bot
+
+
