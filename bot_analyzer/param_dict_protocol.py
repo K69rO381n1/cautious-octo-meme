@@ -53,7 +53,6 @@ Write/Read parameters matrix protocol:
         Building evolutionary system that runs on the parameters matrix generated using #Idea_1,
         and by doing that finds MLE for building that best guided bot.
 """
-from random import randint, choice
 
 NUM_OF_PIRATES_IN_GROUP = 4
 
@@ -106,7 +105,7 @@ conditions = [is_right_to_initial_loc, is_carrying_treasures, is_enemy_guarding_
 # Available actions: sail north\east\south\west, shot enemy, defend ship & summon bermuda zone at location
 def _direction_to_location(initial_loc, direction):
     coordinate_addition = {'n': (-1, 0), 's': (1, 0), 'w': (0, -1), 'e': (0, 1), '-': (0, 0)}[direction]
-    return Location(initial_loc.row + coordinate_addition[0], initial_loc.col + coordinate_addition[1])
+    return initial_loc.row + coordinate_addition[0], initial_loc.col + coordinate_addition[1]
 
 
 SAIL = [lambda game:
@@ -167,3 +166,18 @@ def get_matching_column(game):
         if conditions[i](game):
             status += 2 ** i
     return status
+
+
+def param_dict2str(param_dict):
+    """
+    
+    :param param_dict: Dict[ Int : Dict[ List[ int ] : int]
+            Maps from situation (Set of conditions are met and the rest aren't) to a Dictionary.
+            This Dict map a turn, i.e a list of basic operations, to the odds of executing it.
+    :return: 
+    """
+    return str(param_dict)
+
+
+def str2param_dict(param_dict_as_str):
+    return eval(param_dict_as_str)

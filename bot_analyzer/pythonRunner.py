@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+"""
+Copied from The starter-kit's "lib" folder
+"""
 import base64
 import imp
 import os

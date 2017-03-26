@@ -1,75 +1,36 @@
-from random import choice, randint
+from random import randint
 
-from param_matrix_protocol import get_matching_column, actions
+from bot_analyzer.param_dict_protocol import get_matching_column, actions
 
-# Keep this unfilled
+# Keep this unfilled !!!
 param_dict =
 
 
-# def act(game, instructions):
-#     # currently receives [num(0-4),num(0-3),num(0-3)]*6
-#     directions = ['' for _ in game.all_my_pirates()]
-#     turn = instructions
-#
-#     for i in xrange(len(turn)/3):
-#         inst = turn[3 * i: 3 * i + 3]
-#         if inst[0] == 1:
-#             directions[int(inst[1])] += 'nswe'[int(inst[2])]
-#
-#         elif inst[0] == 2:
-#             ms = game.get_my_ship_by_id(int(inst[1]))
-#             es = game.get_enemy_ship_by_id(int(inst[2]))
-#             game.attack(ms, es)
-#
-#         elif inst[0] == 3:
-#             ms = game.get_my_ship_by_id(int(inst[1]))
-#             game.defend(ms)
-#
-#         elif inst[0] == 4:
-#             ms = game.get_my_ship_by_id(int(inst[1]))
-#             game.summon_bermuda_zone(ms)
-#
-#     for ship in game.all_my_pirates():
-#         dest = game.destination(ship, directions[ship.id])
-#         game.set_sail(ship, dest)
-#
-#
-# def calculate(inp):
-#     mats = [
-#     ]
-#     return mats[0][inp]
-#
-#
-# def parse(game):
-#     return game.get_turn()
-#
-#
-# def is_valid_actions_list(actions_list):
-#     # TODO: !!
-#     return True
-
-
-def choose_actions(game):
+def choose_actions_set(game):
+    """
+    :param game: Game object, given by the game engine.
+    :return: actions set which selected using weighted random, based on the game's current situation.
+    """
     situation = get_matching_column(game)
 
     if not param_dict.has_key(situation):
         # TODO: complete undefined behavior
         return []
 
-    keys = param_dict[situation].keys()
-    values = [param_dict[situation][key] for key in keys]
+    possible_actions_sets = param_dict[situation].keys()
+    likelihood = [param_dict[situation][actions_set] for actions_set in possible_actions_sets]
 
-    total_sum = sum(values)
+    total_sum = sum(likelihood)
 
     required_sum = randint(total_sum)
     current_action_index = 0
     current_sum = 0
 
     while current_sum < required_sum:
-        current_sum += values[current_action_index]
+        current_sum += likelihood[current_action_index]
         current_action_index += 1
 
-    return keys[current_action_index - 1]
+    return possible_actions_sets[current_action_index - 1]
 
 
 def do_turn(game):
@@ -87,5 +48,5 @@ def do_turn(game):
     """
     # act(game, calculate(parse(game)))
 
-    for action_id in choose_actions(game):
+    for action_id in choose_actions_set(game):
         actions[action_id](game)

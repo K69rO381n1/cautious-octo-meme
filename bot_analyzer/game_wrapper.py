@@ -1,22 +1,61 @@
+from bot_analyzer.analyzer import save
+from bot_analyzer.param_dict_protocol import *
 from pythonRunner import Pirates
-from numpy import zeros
-
-from param_matrix_protocol import *
 
 DEFAULT_PARAM_DICT_FOLDER = u'\param_dictionaries\\'
 PARAM_DICT_EXT = '.pd'
 
+print 'a'
 
+
+def matryoshka(cls):
+    """
+    Class decorator uses to enable access from inned class to the outer's static properties.
+    """
+
+    # get types of classes
+    class classtypes:
+        pass
+
+    classtypes = (type, type(classtypes))
+
+    # get names of all public names in outer class
+    directory = [n for n in dir(cls) if not n.startswith("_")]
+
+    # get names of all non-callable attributes of outer class
+    attributes = [n for n in directory if not callable(getattr(cls, n))]
+
+    # get names of all inner classes
+    innerclasses = [n for n in directory if isinstance(getattr(cls, n), classtypes)]
+
+    # copy attributes from outer to inner classes (don't overwrite)
+    for c in innerclasses:
+        c = getattr(cls, c)
+        for a in attributes:
+            if not hasattr(c, a):
+                setattr(c, a, getattr(cls, a))
+
+    return cls
+
+
+@matryoshka
 class GameWrapper(Pirates):
+    """
+    This is a wrapper class for the Game object (Also known as Pirates), supplied by the game's engine.
+    This class contains code, designed to build a param_dict during a live Game session,
+     and write it at the end of the process.
+    """
+    # TODO: Make python's interpreter and environment call the Garbage collector.
+
+    enemy_name = ''
+
     class SavedDictionary(dict):
         def __del__(self):
-            with open(DEFAULT_PARAM_DICT_FOLDER + GameWrapper.enemy_name + PARAM_DICT_EXT, 'r') as param_dict_file:
-                from bot_analyzer.analyzer import param_dict2str
-                param_dict_file.write(param_dict2str(GameWrapper.param_dict))
-                param_dict_file.close()
+            with open(DEFAULT_PARAM_DICT_FOLDER + self.enemy_name + PARAM_DICT_EXT, 'r') as param_dict_file:
+                save(param_dict2str(GameWrapper.param_dict),
+                     DEFAULT_PARAM_DICT_FOLDER + self.enemy_name + PARAM_DICT_EXT)
 
     param_dict = SavedDictionary()
-    enemy_name = None
 
     def __init__(self, game):
         assert isinstance(game, Pirates)
@@ -36,7 +75,7 @@ class GameWrapper(Pirates):
                 GameWrapper.param_dict[self.situation][self.actions_been_taken] = 1
         else:
             GameWrapper.param_dict[self.situation] = {self.actions_been_taken: 1}
-
+            
     # ####################################################################
 
 

@@ -59,8 +59,6 @@ def run(bot1_file, bot2_file, map=''):
     if map != '':
         comm.append(map)
 
-    print comm
-
     null_file = open(os.devnull, 'w')
     out = subprocess.check_output(comm, stderr=null_file)
     print out
@@ -77,24 +75,24 @@ def run(bot1_file, bot2_file, map=''):
     else:
         winner = int(winner)
     return scores, winner
-    
-def test_all(bot, map='', tie_adds_half = False):
+
+
+def test_all(bot, map='', tie_adds_half=False):
     # runs bot against all bots,
-    #returns total score for bot, for enemy and winning count
+    # returns total score for bot, for enemy and winning count
     if map == 'random':
         map = random.choice(maps())
-        
+
     wn_cntr = 0
     my_tot_scr = 0
     en_tot_scr = 0
     for bot2 in bots():
-        (s1,s2),wn = run(bot,bot2,map)
-        wn_cntr += (wn == 1) + 0.5*tie_adds_half*(wn==0)
+        (s1, s2), wn = run(bot, bot2, map)
+        wn_cntr += (wn == 1) + 0.5 * tie_adds_half * (wn == 0)
         my_tot_scr += s1
         en_tot_scr += s2
     return (my_tot_scr, en_tot_scr), wn_cntr
-        
-        
+
 
 if __name__ == "__main__":
     import sys
@@ -113,4 +111,3 @@ if __name__ == "__main__":
     scores, winner = run(*sys.argv[1:])
     print ' '.join([str(e) for e in scores])
     print winner
-
